@@ -3,23 +3,25 @@ import wmi
 
 def getInfoCPU(c):
 	usageCPU = 0
+	for processor in c.Win32_Processor():
+		no_processors = processor.NumberOfLogicalProcessors
+		print no_processors
 	for process in c.InstancesOf('Win32_Process'):
-		for p in c.Win32_PerfRawData_PerfProc_Process (IDProcess=process.ProcessID):
-			currentCPUtime, currentTimestamp = long(p.PercentProcessorTime), long(p.Timestamp_Sys100NS)
+		for p in c.Win32_PerfFormattedData_PerfProc_Process (IDProcess=process.ProcessID):
+			processCPUusage = float(p.PercentProcessorTime)/no_processors
 			if process.Caption == None:
 				processorDesc = 'Unknown'
 			else:
 				processorDesc = process.Caption
-			try:
-				processorUsageCPU = (float(currentCPUtime)/float(currentTimestamp)*100)
-			except ZeroDivisionError:
-				processorUsageCPU = 0
 
-			usageCPU += processorUsageCPU
-			print ('Process ' + processorDesc + ', usage: ' + str(processorUsageCPU))
-	usageCPU = '%.04f' % usageCPU
+			if processorDesc !='System Idle Process':
+				print processCPUusage
+				processorUsageCPU = processCPUusage
+				usageCPU += processorUsageCPU
+				print ('Process ' + processorDesc + ', usage: ' + str(processorUsageCPU))
+	usageCPU = '%.02f' % usageCPU
 	
-	return str(usageCPU)
+	return str(no_processors) + ';' + str(usageCPU)
 
 def getInfoMemory(c):
 	for os in c.Win32_OperatingSystem():
@@ -47,8 +49,13 @@ def getInfoMemory(c):
 		
 		return str(physicalMemory) + unit + ';' + str(freeMemory) + unit
 	
-def getInfoNetwork():
-	pass
+def getInfoNetwork(c):
+	net = ''
+	for network in c.Win32_NetworkAdapterConfiguration():
+		if network.IPEnabled:
+			print 'Caption: ' + network.Caption
+			net += network.Caption
+	return net
 	
 def getInfo():
 	c = wmi.WMI()
@@ -57,6 +64,7 @@ def getInfo():
 		message += os.Caption
 	message += ';' + getInfoCPU(c)
 	message += ';' + getInfoMemory(c)
+	#message += ';' + getInfoNetwork(c)
 	
 	return message
 
