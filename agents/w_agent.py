@@ -5,7 +5,7 @@ def getInfoCPU(c):
 	usageCPU = 0
 	for processor in c.Win32_Processor():
 		no_processors = processor.NumberOfLogicalProcessors
-		print no_processors
+		
 	for process in c.InstancesOf('Win32_Process'):
 		for p in c.Win32_PerfFormattedData_PerfProc_Process (IDProcess=process.ProcessID):
 			processCPUusage = float(p.PercentProcessorTime)/no_processors
@@ -15,7 +15,6 @@ def getInfoCPU(c):
 				processorDesc = process.Caption
 
 			if processorDesc !='System Idle Process':
-				print processCPUusage
 				processorUsageCPU = processCPUusage
 				usageCPU += processorUsageCPU
 				print ('Process ' + processorDesc + ', usage: ' + str(processorUsageCPU))
@@ -65,17 +64,22 @@ def getInfoNetwork(c):
 	print 'Network usage: ' + netUsage
 	return str(netUsage)
 
-def getInfoDisk():
-	pass
+def getInfoDisk(c):
+	for disk in c.Win32_PerfFormattedData_PerfDisk_PhysicalDisk(Name ='_Total'):
+		diskUsage = disk.PercentDiskTime
+		print 'Disk usage: ' + diskUsage + '%'
+		
+		return str(diskUsage)
 	
 def getInfo():
 	c = wmi.WMI()
 	message = ''
 	for os in c.Win32_OperatingSystem():
 		message += os.Caption
-	#message += ';' + getInfoCPU(c)
-	#message += ';' + getInfoMemory(c)
-	#message += ';' + getInfoNetwork(c)
+	message += ';' + getInfoCPU(c)
+	message += ';' + getInfoMemory(c)
+	message += ';' + getInfoNetwork(c)
+	message += ';' + getInfoDisk(c)
 	
 	return message
 
