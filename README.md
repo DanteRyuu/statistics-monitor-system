@@ -12,12 +12,13 @@ MSDN -> Win32 classes:
 	-PerfFormattedData_PerfProc_Process: https://msdn.microsoft.com/en-us/library/aa394277%28v=vs.85%29.aspx
 	-PerfFormattedData_Tcpip_NetworkInterface: https://msdn.microsoft.com/en-us/library/aa394293%28v=vs.85%29.aspx
 	-PerfFormattedData_PerfDisk_PhysicalDisk: https://msdn.microsoft.com/en-us/library/aa394262%28v=vs.85%29.aspx
+	-ComputerSystemProduct: https://msdn.microsoft.com/en-us/library/aa394105%28v=vs.85%29.aspx
 	
 To do:
 	- using threads to gather info faster
 	- linux agent
 	- use a database for storing info
 	- unit-test the app
-	- find a unique id for machines
+	- find a unique id for machines --- done
 	- gather additional info
-	- set default/specified timers for sending updates
+	- set default/specified timers for sending periodic updates

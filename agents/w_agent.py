@@ -1,6 +1,10 @@
 import pika
 import wmi
 
+def getUniqueID(c):
+	for comp in c.Win32_ComputerSystemProduct():
+		return comp.UUID
+
 def getInfoCPU(c):
 	usageCPU = 0
 	for processor in c.Win32_Processor():
@@ -73,9 +77,9 @@ def getInfoDisk(c):
 	
 def getInfo():
 	c = wmi.WMI()
-	message = ''
+	message = getUniqueID(c)
 	for os in c.Win32_OperatingSystem():
-		message += os.Caption
+		message += ';' + os.Caption
 	message += ';' + getInfoCPU(c)
 	message += ';' + getInfoMemory(c)
 	message += ';' + getInfoNetwork(c)
