@@ -9,11 +9,12 @@ print ' '
 
 def callback(ch, method, properties, body):
     info = body.split(';')
-    print ('OS: ' + info[0])
-    print ('Processors: ' + info[1])
-    print ('CPU: ' + info[2] + '%')
-    print ('Total RAM: ' + info[3])
-    print ('Free RAM: ' + info[4])
+    #print ('OS: ' + info[0])
+   # print ('Processors: ' + info[1])
+   # print ('CPU: ' + info[2] + '%')
+   # print ('Total RAM: ' + info[3])
+   # print ('Free RAM: ' + info[4])
+   # print ('Network usage: ' + info[5] + '%')
 	
     ch.basic_ack(delivery_tag = method.delivery_tag)
 

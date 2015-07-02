@@ -50,20 +50,31 @@ def getInfoMemory(c):
 		return str(physicalMemory) + unit + ';' + str(freeMemory) + unit
 	
 def getInfoNetwork(c):
-	net = ''
-	for network in c.Win32_NetworkAdapterConfiguration():
-		if network.IPEnabled:
-			print 'Caption: ' + network.Caption
-			net += network.Caption
-	return net
+	netUsage = 0
+	for net in c.Win32_PerfFormattedData_TCPIP_NetworkInterface():
+		bytesTransfered = int(net.BytesTotalPerSec) * 8
+		bandwidth = int(net.CurrentBandwidth)
+		
+		currentUsage = 0
+		if bytesTransfered > 0:
+			currentUsage = float(bytesTransfered*100)/bandwidth
+
+		netUsage += currentUsage
+		
+	netUsage = '%.02f' % netUsage
+	print 'Network usage: ' + netUsage
+	return str(netUsage)
+
+def getInfoDisk():
+	pass
 	
 def getInfo():
 	c = wmi.WMI()
 	message = ''
 	for os in c.Win32_OperatingSystem():
 		message += os.Caption
-	message += ';' + getInfoCPU(c)
-	message += ';' + getInfoMemory(c)
+	#message += ';' + getInfoCPU(c)
+	#message += ';' + getInfoMemory(c)
 	#message += ';' + getInfoNetwork(c)
 	
 	return message
