@@ -23,19 +23,6 @@ class Stats(Base):
        return "<Stats(UUID='%s', OS='%s', Processors='%s', CPU='%s'%, Total RAM='%s', Free RAM='%s', Network usage='%s'%, DiskI/O='%s'%)>" % (
                            self.uuid, self.os, self.no_processors, self.cpu, self.memory, self.free_memory, self.network, self.disk)
 
-Stats.__table__ 
-Table('stats', MetaData(bind=None),
-            Column('id', Integer(), table=<stats>, primary_key=True, nullable=False),
-            Column('uuid', String(), table=<stats>),
-            Column('os', String(), table=<stats>),
-            Column('no_processors', Integer(), table=<stats>),
-            Column('cpu', Float(), table=<stats>),
-            Column('memory', String(), table=<stats>),
-            Column('free_memory', String(), table=<stats>),
-            Column('network', Float(), table=<stats>),
-            Column('disk', Float(), table=<stats>), schema=None)
-
-Base.metadata.create_all(engine) 
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(
         host='localhost'))
